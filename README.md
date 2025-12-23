@@ -43,6 +43,7 @@ RNA_Seq_Biomarker_Project/
 
 - Python 3.8+
 - pip
+- Kaggle account (for downloading data)
 
 ### Installation
 
@@ -57,11 +58,19 @@ cd Simple-Biomarker-Prediction-for-Disease-Classification
 pip install -r requirements.txt
 ```
 
-3. Run the pipeline:
-```bash
-# Step 1: Data Loading & Cleanup
-python scripts/1_clean_and_eda.py
+3. **Download the dataset** from Kaggle:
+   - Visit: [Gene Expression Cancer RNA-Seq Dataset](https://www.kaggle.com/datasets/waalbannyantudre/gene-expression-cancer-rna-seq-donated-on-682016)
+   - Download the dataset files
+   - Place `data.csv` in the `data/raw/` folder
+   - The `labels.csv` file is already included in this repository
 
+4. Run the data cleaning script:
+```bash
+python scripts/1_clean_and_eda.py
+```
+
+5. Continue with the pipeline:
+```bash
 # Step 2: Feature Selection (coming soon)
 python scripts/2_feature_selection.py
 
