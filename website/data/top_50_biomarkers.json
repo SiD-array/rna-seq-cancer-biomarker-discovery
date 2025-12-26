@@ -1,0 +1,661 @@
+{
+  "metadata": {
+    "title": "Top 50 Cancer Biomarkers",
+    "description": "Verified data from gene_coefficient_rankings.csv",
+    "model": "Logistic Regression",
+    "source_file": "reports/gene_coefficient_rankings.csv",
+    "generated_date": "2025-12-26T01:35:26.331934"
+  },
+  "biomarkers": [
+    {
+      "rank": 1,
+      "gene_id": "gene_15898",
+      "max_abs_coef": 0.0816,
+      "dominant_class": "LUAD",
+      "dominant_coef": 0.0816,
+      "coefficients": {
+        "BRCA": -0.0496,
+        "COAD": -0.0177,
+        "KIRC": -0.0042,
+        "LUAD": 0.0816
+      }
+    },
+    {
+      "rank": 2,
+      "gene_id": "gene_6594",
+      "max_abs_coef": 0.0615,
+      "dominant_class": "LUAD",
+      "dominant_coef": 0.0615,
+      "coefficients": {
+        "BRCA": -0.0614,
+        "COAD": 0.0144,
+        "KIRC": -0.0066,
+        "LUAD": 0.0615
+      }
+    },
+    {
+      "rank": 3,
+      "gene_id": "gene_7964",
+      "max_abs_coef": 0.0538,
+      "dominant_class": "BRCA",
+      "dominant_coef": -0.0538,
+      "coefficients": {
+        "BRCA": -0.0538,
+        "COAD": 0.0038,
+        "KIRC": 0.0194,
+        "LUAD": 0.0323
+      }
+    },
+    {
+      "rank": 4,
+      "gene_id": "gene_2318",
+      "max_abs_coef": 0.0534,
+      "dominant_class": "BRCA",
+      "dominant_coef": -0.0534,
+      "coefficients": {
+        "BRCA": -0.0534,
+        "COAD": 0.0113,
+        "KIRC": -0.0103,
+        "LUAD": 0.0531
+      }
+    },
+    {
+      "rank": 5,
+      "gene_id": "gene_357",
+      "max_abs_coef": 0.0513,
+      "dominant_class": "BRCA",
+      "dominant_coef": 0.0513,
+      "coefficients": {
+        "BRCA": 0.0513,
+        "COAD": -0.0022,
+        "KIRC": -0.0062,
+        "LUAD": -0.0383
+      }
+    },
+    {
+      "rank": 6,
+      "gene_id": "gene_15895",
+      "max_abs_coef": 0.0507,
+      "dominant_class": "LUAD",
+      "dominant_coef": 0.0507,
+      "coefficients": {
+        "BRCA": -0.0225,
+        "COAD": -0.0125,
+        "KIRC": -0.0108,
+        "LUAD": 0.0507
+      }
+    },
+    {
+      "rank": 7,
+      "gene_id": "gene_5578",
+      "max_abs_coef": 0.0493,
+      "dominant_class": "BRCA",
+      "dominant_coef": 0.0493,
+      "coefficients": {
+        "BRCA": 0.0493,
+        "COAD": -0.0031,
+        "KIRC": -0.0018,
+        "LUAD": -0.0395
+      }
+    },
+    {
+      "rank": 8,
+      "gene_id": "gene_8024",
+      "max_abs_coef": 0.049,
+      "dominant_class": "BRCA",
+      "dominant_coef": 0.049,
+      "coefficients": {
+        "BRCA": 0.049,
+        "COAD": -0.0061,
+        "KIRC": 0.0113,
+        "LUAD": -0.0441
+      }
+    },
+    {
+      "rank": 9,
+      "gene_id": "gene_15896",
+      "max_abs_coef": 0.0486,
+      "dominant_class": "LUAD",
+      "dominant_coef": 0.0486,
+      "coefficients": {
+        "BRCA": -0.0173,
+        "COAD": -0.0189,
+        "KIRC": -0.0085,
+        "LUAD": 0.0486
+      }
+    },
+    {
+      "rank": 10,
+      "gene_id": "gene_15301",
+      "max_abs_coef": 0.0478,
+      "dominant_class": "BRCA",
+      "dominant_coef": -0.0478,
+      "coefficients": {
+        "BRCA": -0.0478,
+        "COAD": 0.0012,
+        "KIRC": 0.0107,
+        "LUAD": 0.0189
+      }
+    },
+    {
+      "rank": 11,
+      "gene_id": "gene_15591",
+      "max_abs_coef": 0.0476,
+      "dominant_class": "LUAD",
+      "dominant_coef": 0.0476,
+      "coefficients": {
+        "BRCA": -0.0206,
+        "COAD": -0.0148,
+        "KIRC": -0.0062,
+        "LUAD": 0.0476
+      }
+    },
+    {
+      "rank": 12,
+      "gene_id": "gene_9652",
+      "max_abs_coef": 0.0468,
+      "dominant_class": "BRCA",
+      "dominant_coef": 0.0468,
+      "coefficients": {
+        "BRCA": 0.0468,
+        "COAD": -0.0074,
+        "KIRC": -0.0089,
+        "LUAD": -0.0319
+      }
+    },
+    {
+      "rank": 13,
+      "gene_id": "gene_15899",
+      "max_abs_coef": 0.0467,
+      "dominant_class": "LUAD",
+      "dominant_coef": 0.0467,
+      "coefficients": {
+        "BRCA": -0.0188,
+        "COAD": -0.0161,
+        "KIRC": -0.0061,
+        "LUAD": 0.0467
+      }
+    },
+    {
+      "rank": 14,
+      "gene_id": "gene_5017",
+      "max_abs_coef": 0.0456,
+      "dominant_class": "LUAD",
+      "dominant_coef": 0.0456,
+      "coefficients": {
+        "BRCA": -0.0311,
+        "COAD": 0.0095,
+        "KIRC": -0.015,
+        "LUAD": 0.0456
+      }
+    },
+    {
+      "rank": 15,
+      "gene_id": "gene_16283",
+      "max_abs_coef": 0.0455,
+      "dominant_class": "LUAD",
+      "dominant_coef": 0.0455,
+      "coefficients": {
+        "BRCA": -0.0185,
+        "COAD": -0.0235,
+        "KIRC": 0.0037,
+        "LUAD": 0.0455
+      }
+    },
+    {
+      "rank": 16,
+      "gene_id": "gene_15668",
+      "max_abs_coef": 0.0445,
+      "dominant_class": "LUAD",
+      "dominant_coef": 0.0445,
+      "coefficients": {
+        "BRCA": -0.0213,
+        "COAD": 0.0032,
+        "KIRC": -0.0174,
+        "LUAD": 0.0445
+      }
+    },
+    {
+      "rank": 17,
+      "gene_id": "gene_15999",
+      "max_abs_coef": 0.044,
+      "dominant_class": "BRCA",
+      "dominant_coef": 0.044,
+      "coefficients": {
+        "BRCA": 0.044,
+        "COAD": -0.0002,
+        "KIRC": -0.0056,
+        "LUAD": -0.0346
+      }
+    },
+    {
+      "rank": 18,
+      "gene_id": "gene_545",
+      "max_abs_coef": 0.042,
+      "dominant_class": "BRCA",
+      "dominant_coef": 0.042,
+      "coefficients": {
+        "BRCA": 0.042,
+        "COAD": -0.0073,
+        "KIRC": -0.0112,
+        "LUAD": -0.0306
+      }
+    },
+    {
+      "rank": 19,
+      "gene_id": "gene_11762",
+      "max_abs_coef": 0.0417,
+      "dominant_class": "BRCA",
+      "dominant_coef": 0.0417,
+      "coefficients": {
+        "BRCA": 0.0417,
+        "COAD": -0.0072,
+        "KIRC": -0.0125,
+        "LUAD": -0.038
+      }
+    },
+    {
+      "rank": 20,
+      "gene_id": "gene_9176",
+      "max_abs_coef": 0.041,
+      "dominant_class": "PRAD",
+      "dominant_coef": 0.041,
+      "coefficients": {
+        "BRCA": -0.0041,
+        "COAD": -0.0045,
+        "KIRC": -0.0114,
+        "LUAD": -0.0209
+      }
+    },
+    {
+      "rank": 21,
+      "gene_id": "gene_8032",
+      "max_abs_coef": 0.0408,
+      "dominant_class": "BRCA",
+      "dominant_coef": 0.0408,
+      "coefficients": {
+        "BRCA": 0.0408,
+        "COAD": -0.0076,
+        "KIRC": 0.0038,
+        "LUAD": -0.0298
+      }
+    },
+    {
+      "rank": 22,
+      "gene_id": "gene_3439",
+      "max_abs_coef": 0.0398,
+      "dominant_class": "KIRC",
+      "dominant_coef": 0.0398,
+      "coefficients": {
+        "BRCA": -0.0153,
+        "COAD": -0.0008,
+        "KIRC": 0.0398,
+        "LUAD": -0.0131
+      }
+    },
+    {
+      "rank": 23,
+      "gene_id": "gene_4773",
+      "max_abs_coef": 0.0396,
+      "dominant_class": "BRCA",
+      "dominant_coef": -0.0396,
+      "coefficients": {
+        "BRCA": -0.0396,
+        "COAD": 0.0007,
+        "KIRC": 0.013,
+        "LUAD": 0.013
+      }
+    },
+    {
+      "rank": 24,
+      "gene_id": "gene_8034",
+      "max_abs_coef": 0.0392,
+      "dominant_class": "LUAD",
+      "dominant_coef": -0.0392,
+      "coefficients": {
+        "BRCA": 0.021,
+        "COAD": 0.0079,
+        "KIRC": 0.007,
+        "LUAD": -0.0392
+      }
+    },
+    {
+      "rank": 25,
+      "gene_id": "gene_8014",
+      "max_abs_coef": 0.039,
+      "dominant_class": "LUAD",
+      "dominant_coef": -0.039,
+      "coefficients": {
+        "BRCA": 0.021,
+        "COAD": 0.0118,
+        "KIRC": -0.0168,
+        "LUAD": -0.039
+      }
+    },
+    {
+      "rank": 26,
+      "gene_id": "gene_10279",
+      "max_abs_coef": 0.0384,
+      "dominant_class": "BRCA",
+      "dominant_coef": 0.0384,
+      "coefficients": {
+        "BRCA": 0.0384,
+        "COAD": 0.0056,
+        "KIRC": -0.0135,
+        "LUAD": -0.0198
+      }
+    },
+    {
+      "rank": 27,
+      "gene_id": "gene_11903",
+      "max_abs_coef": 0.0384,
+      "dominant_class": "LUAD",
+      "dominant_coef": 0.0384,
+      "coefficients": {
+        "BRCA": -0.0124,
+        "COAD": -0.0109,
+        "KIRC": -0.0126,
+        "LUAD": 0.0384
+      }
+    },
+    {
+      "rank": 28,
+      "gene_id": "gene_13517",
+      "max_abs_coef": 0.0381,
+      "dominant_class": "LUAD",
+      "dominant_coef": -0.0381,
+      "coefficients": {
+        "BRCA": 0.0315,
+        "COAD": 0.0103,
+        "KIRC": -0.022,
+        "LUAD": -0.0381
+      }
+    },
+    {
+      "rank": 29,
+      "gene_id": "gene_9175",
+      "max_abs_coef": 0.038,
+      "dominant_class": "PRAD",
+      "dominant_coef": 0.038,
+      "coefficients": {
+        "BRCA": 0.0091,
+        "COAD": -0.009,
+        "KIRC": -0.01,
+        "LUAD": -0.0281
+      }
+    },
+    {
+      "rank": 30,
+      "gene_id": "gene_8891",
+      "max_abs_coef": 0.0375,
+      "dominant_class": "BRCA",
+      "dominant_coef": -0.0375,
+      "coefficients": {
+        "BRCA": -0.0375,
+        "COAD": 0.0013,
+        "KIRC": 0.0104,
+        "LUAD": 0.0122
+      }
+    },
+    {
+      "rank": 31,
+      "gene_id": "gene_16372",
+      "max_abs_coef": 0.0372,
+      "dominant_class": "BRCA",
+      "dominant_coef": -0.0372,
+      "coefficients": {
+        "BRCA": -0.0372,
+        "COAD": -0.0116,
+        "KIRC": 0.0109,
+        "LUAD": 0.0273
+      }
+    },
+    {
+      "rank": 32,
+      "gene_id": "gene_13639",
+      "max_abs_coef": 0.0367,
+      "dominant_class": "LUAD",
+      "dominant_coef": 0.0367,
+      "coefficients": {
+        "BRCA": -0.0154,
+        "COAD": -0.0105,
+        "KIRC": -0.0058,
+        "LUAD": 0.0367
+      }
+    },
+    {
+      "rank": 33,
+      "gene_id": "gene_6734",
+      "max_abs_coef": 0.0365,
+      "dominant_class": "BRCA",
+      "dominant_coef": 0.0365,
+      "coefficients": {
+        "BRCA": 0.0365,
+        "COAD": 0.0062,
+        "KIRC": -0.0189,
+        "LUAD": -0.0302
+      }
+    },
+    {
+      "rank": 34,
+      "gene_id": "gene_5576",
+      "max_abs_coef": 0.0364,
+      "dominant_class": "LUAD",
+      "dominant_coef": -0.0364,
+      "coefficients": {
+        "BRCA": 0.0249,
+        "COAD": -0.0062,
+        "KIRC": 0.0205,
+        "LUAD": -0.0364
+      }
+    },
+    {
+      "rank": 35,
+      "gene_id": "gene_9177",
+      "max_abs_coef": 0.0361,
+      "dominant_class": "LUAD",
+      "dominant_coef": -0.0361,
+      "coefficients": {
+        "BRCA": 0.0206,
+        "COAD": -0.0046,
+        "KIRC": -0.0066,
+        "LUAD": -0.0361
+      }
+    },
+    {
+      "rank": 36,
+      "gene_id": "gene_1735",
+      "max_abs_coef": 0.0359,
+      "dominant_class": "LUAD",
+      "dominant_coef": -0.0359,
+      "coefficients": {
+        "BRCA": 0.0177,
+        "COAD": 0.0194,
+        "KIRC": 0.0062,
+        "LUAD": -0.0359
+      }
+    },
+    {
+      "rank": 37,
+      "gene_id": "gene_19296",
+      "max_abs_coef": 0.0358,
+      "dominant_class": "BRCA",
+      "dominant_coef": -0.0358,
+      "coefficients": {
+        "BRCA": -0.0358,
+        "COAD": -0.0013,
+        "KIRC": 0.0105,
+        "LUAD": 0.0117
+      }
+    },
+    {
+      "rank": 38,
+      "gene_id": "gene_17905",
+      "max_abs_coef": 0.0356,
+      "dominant_class": "BRCA",
+      "dominant_coef": 0.0356,
+      "coefficients": {
+        "BRCA": 0.0356,
+        "COAD": -0.0048,
+        "KIRC": -0.0052,
+        "LUAD": -0.0195
+      }
+    },
+    {
+      "rank": 39,
+      "gene_id": "gene_11920",
+      "max_abs_coef": 0.0356,
+      "dominant_class": "BRCA",
+      "dominant_coef": -0.0356,
+      "coefficients": {
+        "BRCA": -0.0356,
+        "COAD": -0.0026,
+        "KIRC": 0.01,
+        "LUAD": 0.0173
+      }
+    },
+    {
+      "rank": 40,
+      "gene_id": "gene_5727",
+      "max_abs_coef": 0.0355,
+      "dominant_class": "BRCA",
+      "dominant_coef": 0.0355,
+      "coefficients": {
+        "BRCA": 0.0355,
+        "COAD": -0.0131,
+        "KIRC": -0.0011,
+        "LUAD": -0.0232
+      }
+    },
+    {
+      "rank": 41,
+      "gene_id": "gene_15897",
+      "max_abs_coef": 0.035,
+      "dominant_class": "LUAD",
+      "dominant_coef": 0.035,
+      "coefficients": {
+        "BRCA": -0.0142,
+        "COAD": -0.015,
+        "KIRC": -0.0162,
+        "LUAD": 0.035
+      }
+    },
+    {
+      "rank": 42,
+      "gene_id": "gene_6733",
+      "max_abs_coef": 0.035,
+      "dominant_class": "KIRC",
+      "dominant_coef": 0.035,
+      "coefficients": {
+        "BRCA": -0.0073,
+        "COAD": -0.008,
+        "KIRC": 0.035,
+        "LUAD": -0.0106
+      }
+    },
+    {
+      "rank": 43,
+      "gene_id": "gene_8031",
+      "max_abs_coef": 0.0349,
+      "dominant_class": "BRCA",
+      "dominant_coef": 0.0349,
+      "coefficients": {
+        "BRCA": 0.0349,
+        "COAD": -0.0055,
+        "KIRC": 0.0051,
+        "LUAD": -0.027
+      }
+    },
+    {
+      "rank": 44,
+      "gene_id": "gene_18753",
+      "max_abs_coef": 0.0345,
+      "dominant_class": "LUAD",
+      "dominant_coef": -0.0345,
+      "coefficients": {
+        "BRCA": 0.0281,
+        "COAD": -0.0091,
+        "KIRC": -0.0047,
+        "LUAD": -0.0345
+      }
+    },
+    {
+      "rank": 45,
+      "gene_id": "gene_15577",
+      "max_abs_coef": 0.0342,
+      "dominant_class": "LUAD",
+      "dominant_coef": 0.0342,
+      "coefficients": {
+        "BRCA": -0.0138,
+        "COAD": -0.0038,
+        "KIRC": -0.0093,
+        "LUAD": 0.0342
+      }
+    },
+    {
+      "rank": 46,
+      "gene_id": "gene_3785",
+      "max_abs_coef": 0.034,
+      "dominant_class": "BRCA",
+      "dominant_coef": 0.034,
+      "coefficients": {
+        "BRCA": 0.034,
+        "COAD": -0.0036,
+        "KIRC": -0.0099,
+        "LUAD": -0.0181
+      }
+    },
+    {
+      "rank": 47,
+      "gene_id": "gene_1566",
+      "max_abs_coef": 0.0331,
+      "dominant_class": "BRCA",
+      "dominant_coef": 0.0331,
+      "coefficients": {
+        "BRCA": 0.0331,
+        "COAD": -0.0101,
+        "KIRC": -0.0071,
+        "LUAD": -0.0165
+      }
+    },
+    {
+      "rank": 48,
+      "gene_id": "gene_9706",
+      "max_abs_coef": 0.033,
+      "dominant_class": "BRCA",
+      "dominant_coef": -0.033,
+      "coefficients": {
+        "BRCA": -0.033,
+        "COAD": -0.0003,
+        "KIRC": 0.0146,
+        "LUAD": 0.0253
+      }
+    },
+    {
+      "rank": 49,
+      "gene_id": "gene_6530",
+      "max_abs_coef": 0.033,
+      "dominant_class": "BRCA",
+      "dominant_coef": 0.033,
+      "coefficients": {
+        "BRCA": 0.033,
+        "COAD": -0.0056,
+        "KIRC": -0.0023,
+        "LUAD": -0.0244
+      }
+    },
+    {
+      "rank": 50,
+      "gene_id": "gene_11550",
+      "max_abs_coef": 0.0329,
+      "dominant_class": "LUAD",
+      "dominant_coef": 0.0329,
+      "coefficients": {
+        "BRCA": -0.0124,
+        "COAD": -0.0172,
+        "KIRC": 0.006,
+        "LUAD": 0.0329
+      }
+    }
+  ]
+}

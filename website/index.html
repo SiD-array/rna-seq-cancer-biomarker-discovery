@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RNA-Seq Cancer Biomarker Discovery</title>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-card: #1c2128;
+            --bg-hover: #262c36;
+            --accent-teal: #2dd4bf;
+            --accent-amber: #fbbf24;
+            --accent-rose: #f43f5e;
+            --accent-violet: #8b5cf6;
+            --accent-sky: #38bdf8;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --text-muted: #6e7681;
+            --border-color: #30363d;
+            --gradient-1: linear-gradient(135deg, var(--accent-teal) 0%, var(--accent-sky) 100%);
+            --gradient-2: linear-gradient(135deg, var(--accent-amber) 0%, var(--accent-rose) 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Crimson Pro', Georgia, serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            font-size: 18px;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(13, 17, 23, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 1000;
+            padding: 0.8rem 2rem;
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.3rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-family: 'IBM Plex Mono', monospace;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+            font-family: 'IBM Plex Mono', monospace;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-teal);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 100px 2rem 4rem;
+        }
+
+        /* Section Styles */
+        .section {
+            margin-bottom: 5rem;
+            scroll-margin-top: 80px;
+        }
+
+        .section-header {
+            margin-bottom: 2.5rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1.5rem;
+        }
+
+        .section-header h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .phase-badge {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.75rem;
+            background: var(--gradient-1);
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            color: var(--bg-primary);
+            font-weight: 600;
+        }
+
+        .data-source {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            background: var(--bg-card);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            margin-left: auto;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 4rem 0 5rem;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .hero h1 span {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 1.4rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto 3rem;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.75rem;
+            text-align: center;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-teal);
+        }
+
+        .stat-icon {
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-family: 'IBM Plex Mono', monospace;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-top: 0.5rem;
+        }
+
+        .stat-source {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+
+        /* Info Box */
+        .info-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.75rem;
+            margin-bottom: 2rem;
+        }
+
+        .info-box h4 {
+            color: var(--accent-teal);
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+
+        .info-box p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .info-box code {
+            background: var(--bg-hover);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--accent-amber);
+        }
+
+        /* Phase Box */
+        .phase-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .phase-box h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .phase-box .phase-num {
+            background: var(--gradient-2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.85rem;
+            color: white;
+        }
+
+        .phase-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+
+        .phase-text {
+            color: var(--text-secondary);
+        }
+
+        .phase-text h4 {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .phase-text ul {
+            margin-left: 1.5rem;
+            margin-top: 0.75rem;
+        }
+
+        .phase-text li {
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight-box {
+            background: rgba(45, 212, 191, 0.1);
+            border: 1px solid rgba(45, 212, 191, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .highlight-box strong {
+            color: var(--accent-teal);
+        }
+
+        .challenge-box {
+            background: rgba(251, 191, 36, 0.1);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .challenge-box strong {
+            color: var(--accent-amber);
+        }
+
+        .solution-box {
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .solution-box strong {
+            color: var(--accent-violet);
+        }
+
+        /* Table Styles */
+        .table-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .table-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .search-box input {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.6rem 1rem;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            width: 250px;
+            font-family: 'IBM Plex Mono', monospace;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--accent-teal);
+        }
+
+        .search-box select {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.6rem 1rem;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: var(--bg-secondary);
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            font-family: 'IBM Plex Mono', monospace;
+        }
+
+        td {
+            padding: 1rem;
+            border-top: 1px solid var(--border-color);
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.9rem;
+        }
+
+        tr:hover td {
+            background: var(--bg-hover);
+        }
+
+        .cancer-badge {
+            display: inline-block;
+            padding: 0.25rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .cancer-BRCA { background: rgba(244, 63, 94, 0.2); color: #f43f5e; }
+        .cancer-COAD { background: rgba(251, 191, 36, 0.2); color: #fbbf24; }
+        .cancer-KIRC { background: rgba(56, 189, 248, 0.2); color: #38bdf8; }
+        .cancer-LUAD { background: rgba(45, 212, 191, 0.2); color: #2dd4bf; }
+        .cancer-PRAD { background: rgba(139, 92, 246, 0.2); color: #8b5cf6; }
+
+        .positive { color: var(--accent-teal); }
+        .negative { color: var(--accent-rose); }
+
+        /* Charts */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.75rem;
+        }
+
+        .chart-title {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .chart-source {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            font-family: 'IBM Plex Mono', monospace;
+            margin-bottom: 1rem;
+        }
+
+        /* Pathway Cards */
+        .pathway-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .pathway-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.75rem;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+
+        .pathway-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-violet);
+        }
+
+        .pathway-card h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .pathway-card .pathway-source {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--accent-violet);
+            background: rgba(139, 92, 246, 0.15);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 0.75rem;
+        }
+
+        .pathway-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .pathway-genes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .gene-tag {
+            background: var(--bg-hover);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--accent-teal);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            padding: 3rem 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            margin-left: 2rem;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.9rem;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-teal);
+        }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2.5rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-header h3 {
+            font-size: 1.5rem;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .modal-close:hover {
+            color: var(--text-primary);
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .detail-label {
+            color: var(--text-secondary);
+        }
+
+        .detail-value {
+            font-family: 'IBM Plex Mono', monospace;
+            font-weight: 500;
+        }
+
+        /* Pipeline Flow */
+        .pipeline-flow {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .pipeline-step {
+            flex: 1;
+            min-width: 200px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .pipeline-step::after {
+            content: '→';
+            position: absolute;
+            right: -1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 1.5rem;
+        }
+
+        .pipeline-step:last-child::after {
+            display: none;
+        }
+
+        .pipeline-step h4 {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .pipeline-step .step-value {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-teal);
+        }
+
+        @media (max-width: 900px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .charts-grid { grid-template-columns: 1fr; }
+            .pathway-grid { grid-template-columns: 1fr; }
+            .phase-content { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-content">
+            <div class="logo">🧬 RNA-Seq Discovery</div>
+            <div class="nav-links">
+                <a href="#home">Home</a>
+                <a href="#phase5a">Phase 5A</a>
+                <a href="#phase5b">Phase 5B</a>
+                <a href="#discovery">Biomarkers</a>
+                <a href="#model">Model</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Hero Section -->
+        <section id="home" class="section hero">
+            <h1>Cancer Biomarker <span>Discovery</span></h1>
+            <p class="hero-subtitle">
+                A machine learning pipeline for multi-class cancer classification using RNA-Seq data, 
+                achieving perfect prediction and identifying therapeutically relevant biomarkers.
+            </p>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">🎯</div>
+                    <div class="stat-value">100%</div>
+                    <div class="stat-label">F1-Macro Score</div>
+                    <div class="stat-source">model_results_summary.txt</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🧬</div>
+                    <div class="stat-value">50</div>
+                    <div class="stat-label">Top Biomarkers</div>
+                    <div class="stat-source">gene_coefficient_rankings.csv</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-value">5</div>
+                    <div class="stat-label">Cancer Types</div>
+                    <div class="stat-source">labels.csv</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🔬</div>
+                    <div class="stat-value">801</div>
+                    <div class="stat-label">Samples</div>
+                    <div class="stat-source">labels.csv</div>
+                </div>
+            </div>
+
+            <!-- Pipeline Flow -->
+            <div class="pipeline-flow">
+                <div class="pipeline-step">
+                    <h4>Raw Features</h4>
+                    <div class="step-value">20,531</div>
+                </div>
+                <div class="pipeline-step">
+                    <h4>After Selection</h4>
+                    <div class="step-value">1,000</div>
+                </div>
+                <div class="pipeline-step">
+                    <h4>Final Panel</h4>
+                    <div class="step-value">50</div>
+                </div>
+                <div class="pipeline-step">
+                    <h4>Pathways</h4>
+                    <div class="step-value">2</div>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <h4>📊 Data Sources</h4>
+                <p>All data displayed on this dashboard is derived directly from project output files. 
+                   Biomarker rankings and coefficients come from <code>gene_coefficient_rankings.csv</code>. 
+                   Model performance metrics are from <code>model_results_summary.txt</code>. 
+                   Class distribution data is from <code>labels.csv</code> (801 samples).</p>
+            </div>
+        </section>
+
+        <!-- Phase 5A: Coefficient Analysis -->
+        <section id="phase5a" class="section">
+            <div class="section-header">
+                <h2>
+                    <span class="phase-badge">PHASE 5A</span>
+                    Model Interpretation: Coefficient Analysis
+                </h2>
+                <p>Leveraging Logistic Regression coefficients to rank genes and identify class-specific biomarkers</p>
+            </div>
+
+            <div class="phase-box">
+                <h3><span class="phase-num">5.1</span> Methodology</h3>
+                <div class="phase-content">
+                    <div class="phase-text">
+                        <h4>Coefficient Extraction</h4>
+                        <p>The trained Logistic Regression model's coefficient matrix was extracted to understand 
+                           how each gene contributes to cancer classification.</p>
+                        <ul>
+                            <li>Matrix shape: <strong>5 classes × 1,000 features</strong></li>
+                            <li>Each gene has 5 coefficient values (one per cancer type)</li>
+                            <li>Positive coefficient: Higher expression → Higher probability of that class</li>
+                            <li>Negative coefficient: Higher expression → Lower probability of that class</li>
+                        </ul>
+                    </div>
+                    <div class="phase-text">
+                        <h4>Biomarker Ranking</h4>
+                        <p>Genes were prioritized by their maximum absolute coefficient value across all 5 classes, 
+                           representing overall predictive power.</p>
+                        <div class="highlight-box">
+                            <strong>Key Finding:</strong> The model relies on a sparse, specific set of genes. 
+                            The top biomarker <code>gene_15898</code> (STXBP3) was identified as the primary 
+                            driver for LUAD classification with a coefficient of +0.0816.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <h4>📁 Generated Files (Phase 5A)</h4>
+                <p>
+                    <code>top_50_influential_biomarkers.txt</code> - Ranked list of top 50 genes by coefficient<br>
+                    <code>gene_coefficient_rankings.csv</code> - Full 1,000 gene coefficient matrix<br>
+                    <code>biomarker_coefficient_heatmap.png</code> - Visual heatmap of top gene coefficients<br>
+                    <code>top1-3_gene_*_boxplot.png</code> - Expression distribution box plots
+                </p>
+            </div>
+
+            <!-- Top Biomarkers by Cancer Type -->
+            <div class="table-container">
+                <div class="table-header">
+                    <h4>🎯 Top Biomarker for Each Cancer Type</h4>
+                    <span class="data-source">Source: README.md & gene_coefficient_rankings.csv</span>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Cancer Type</th>
+                            <th>Top Biomarker</th>
+                            <th>Coefficient</th>
+                            <th>Biological Role</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="cancer-badge cancer-BRCA">BRCA</span> Breast</td>
+                            <td><code>gene_357</code> (AIM2)</td>
+                            <td class="positive">+0.0513</td>
+                            <td>DNA-sensing inflammasome</td>
+                        </tr>
+                        <tr>
+                            <td><span class="cancer-badge cancer-COAD">COAD</span> Colon</td>
+                            <td><code>gene_12013</code></td>
+                            <td class="positive">+0.0285</td>
+                            <td>Upregulated</td>
+                        </tr>
+                        <tr>
+                            <td><span class="cancer-badge cancer-KIRC">KIRC</span> Kidney</td>
+                            <td><code>gene_3439</code></td>
+                            <td class="positive">+0.0398</td>
+                            <td>Upregulated</td>
+                        </tr>
+                        <tr>
+                            <td><span class="cancer-badge cancer-LUAD">LUAD</span> Lung</td>
+                            <td><code>gene_15898</code> (STXBP3)</td>
+                            <td class="positive">+0.0816</td>
+                            <td>Vesicular transport</td>
+                        </tr>
+                        <tr>
+                            <td><span class="cancer-badge cancer-PRAD">PRAD</span> Prostate</td>
+                            <td><code>gene_9176</code></td>
+                            <td class="positive">+0.0410</td>
+                            <td>Upregulated</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Phase 5B: Pathway Enrichment -->
+        <section id="phase5b" class="section">
+            <div class="section-header">
+                <h2>
+                    <span class="phase-badge">PHASE 5B</span>
+                    Pathway Enrichment & Validation
+                </h2>
+                <p>External validation of the biomarker panel using gProfiler pathway analysis</p>
+            </div>
+
+            <div class="phase-box">
+                <h3><span class="phase-num">5.2</span> The Gene ID Mapping Challenge</h3>
+                <div class="phase-content">
+                    <div class="phase-text">
+                        <div class="challenge-box">
+                            <strong>⚠️ Challenge:</strong> The original dataset used custom gene IDs 
+                            (<code>gene_15898</code>) that were unrecognized by standard bioinformatics tools 
+                            like gProfiler. This is a common obstacle in RNA-Seq analysis when datasets 
+                            don't use standard nomenclature.
+                        </div>
+                    </div>
+                    <div class="phase-text">
+                        <div class="solution-box">
+                            <strong>✅ Solution:</strong> A dedicated data mapping exercise was performed, 
+                            confirming that the numeric identifier corresponded to the official <strong>HGNC ID</strong>. 
+                            This allowed successful conversion of the entire biomarker panel to verifiable symbols 
+                            (e.g., gene_15898 → STXBP3, gene_357 → AIM2).
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <h4>🔬 gProfiler Analysis</h4>
+                <p>The final 50-gene biomarker panel was submitted to <a href="https://biit.cs.ut.ee/gprofiler/" target="_blank" style="color: var(--accent-teal);">gProfiler</a> 
+                   for pathway enrichment analysis. The tool identified statistically significant over-representation 
+                   in specific biological pathways, validating the functional significance of our biomarker discoveries.</p>
+            </div>
+
+            <h4 style="margin: 2rem 0 1rem;">🧬 Key Pathway Findings</h4>
+            <div class="pathway-grid">
+                <div class="pathway-card">
+                    <span class="pathway-source">GO:MF</span>
+                    <h4>DNA-binding Transcription Factor Activity</h4>
+                    <p>Statistically significant enrichment in genes involved in transcriptional regulation, 
+                       suggesting the biomarker panel captures fundamental gene expression control mechanisms 
+                       that differ between cancer types.</p>
+                    <div class="highlight-box">
+                        <strong>Biological Significance:</strong> Transcription factors are master regulators 
+                        of cellular identity and are frequently dysregulated in cancer.
+                    </div>
+                </div>
+                <div class="pathway-card">
+                    <span class="pathway-source">GO:MF</span>
+                    <h4>Syntaxin Binding / Vesicular Transport</h4>
+                    <p>Enrichment driven by the STXBP (Syntaxin Binding Protein) gene family, particularly 
+                       STXBP3 which emerged as the top biomarker for LUAD classification.</p>
+                    <div class="highlight-box">
+                        <strong>STXBP Family:</strong> These genes regulate vesicular trafficking and 
+                        membrane fusion, processes that are altered in cancer metastasis.
+                    </div>
+                    <div class="pathway-genes">
+                        <span class="gene-tag">STXBP3</span>
+                        <span class="gene-tag">STXBP-related genes</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="phase-box" style="margin-top: 2rem;">
+                <h3>🏆 Therapeutic Target Candidates</h3>
+                <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                    Based on coefficient analysis and pathway validation, the following genes are identified 
+                    as high-priority therapeutic targets for future research:
+                </p>
+                <div class="phase-content">
+                    <div class="phase-text">
+                        <h4>STXBP3 (gene_15898)</h4>
+                        <ul>
+                            <li>Highest coefficient: +0.0816 for LUAD</li>
+                            <li>Function: Vesicular transport regulation</li>
+                            <li>Pathway: Syntaxin binding</li>
+                            <li>Potential: Lung adenocarcinoma biomarker</li>
+                        </ul>
+                    </div>
+                    <div class="phase-text">
+                        <h4>AIM2 (gene_357)</h4>
+                        <ul>
+                            <li>Top BRCA biomarker: +0.0513</li>
+                            <li>Function: DNA-sensing inflammasome</li>
+                            <li>Pathway: Innate immune response</li>
+                            <li>Potential: Breast cancer immunotherapy target</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Discovery Zone -->
+        <section id="discovery" class="section">
+            <div class="section-header">
+                <h2>📊 Discovery Zone <span class="data-source">From gene_coefficient_rankings.csv</span></h2>
+                <p>Top 50 cancer biomarkers ranked by maximum absolute coefficient from Logistic Regression model</p>
+            </div>
+
+            <div class="info-box">
+                <h4>ℹ️ About the Data</h4>
+                <p><strong>Gene IDs:</strong> Original dataset identifiers (gene_XXXX format). 
+                   <strong>Coefficients:</strong> Extracted from trained Logistic Regression model. 
+                   <strong>Dominant Class:</strong> Cancer type with highest absolute coefficient for each gene.
+                   All values sourced from <code>reports/gene_coefficient_rankings.csv</code>.</p>
+            </div>
+
+            <div class="table-container">
+                <div class="table-header">
+                    <h4>🧬 Top 50 Biomarkers</h4>
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="Search gene ID...">
+                        <select id="filterSelect">
+                            <option value="">All Cancer Types</option>
+                            <option value="BRCA">BRCA (Breast)</option>
+                            <option value="COAD">COAD (Colon)</option>
+                            <option value="KIRC">KIRC (Kidney)</option>
+                            <option value="LUAD">LUAD (Lung)</option>
+                            <option value="PRAD">PRAD (Prostate)</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table id="biomarkerTable">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Gene ID</th>
+                                <th>Max |Coef|</th>
+                                <th>Dominant Cancer</th>
+                                <th>Coefficient</th>
+                            </tr>
+                        </thead>
+                        <tbody id="biomarkerTableBody">
+                            <!-- Populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="charts-grid">
+                <div class="chart-container">
+                    <div class="chart-title">📊 Top 10 Biomarkers by Coefficient</div>
+                    <div class="chart-source">Source: gene_coefficient_rankings.csv</div>
+                    <canvas id="topGenesChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-title">🎯 Dominant Cancer Distribution</div>
+                    <div class="chart-source">Source: gene_coefficient_rankings.csv (top 50 genes)</div>
+                    <canvas id="cancerDistChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-title">🧬 Coefficient Heatmap (Top 15 Genes)</div>
+                <div class="chart-source">Source: gene_coefficient_rankings.csv | Coefficients by cancer type</div>
+                <canvas id="heatmapChart"></canvas>
+            </div>
+        </section>
+
+        <!-- Model Results -->
+        <section id="model" class="section">
+            <div class="section-header">
+                <h2>📈 Model Performance <span class="data-source">From model_comparison.csv</span></h2>
+                <p>Comparison of machine learning models trained on the 1,000-gene biomarker panel</p>
+            </div>
+
+            <div class="table-container">
+                <div class="table-header">
+                    <h4>🏆 Model Comparison</h4>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Model</th>
+                            <th>F1-Macro</th>
+                            <th>Accuracy</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Logistic Regression</strong></td>
+                            <td class="positive">100.00%</td>
+                            <td class="positive">100.00%</td>
+                            <td>🥇 Best Model</td>
+                        </tr>
+                        <tr>
+                            <td>Support Vector Classifier</td>
+                            <td>99.89%</td>
+                            <td>99.88%</td>
+                            <td>🥈</td>
+                        </tr>
+                        <tr>
+                            <td>Random Forest</td>
+                            <td>99.68%</td>
+                            <td>99.63%</td>
+                            <td>🥉</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="info-box">
+                <h4>🔬 Why Logistic Regression?</h4>
+                <p>Despite achieving similar accuracy to ensemble methods, Logistic Regression was chosen as the 
+                   final model because of its <strong>interpretability</strong>. The coefficient matrix allows 
+                   direct extraction of gene-cancer associations, enabling Phase 5 biomarker discovery and 
+                   pathway validation. This demonstrates the value of interpretable models in biomedical research.</p>
+            </div>
+
+            <div class="charts-grid">
+                <div class="chart-container">
+                    <div class="chart-title">📊 Class Distribution</div>
+                    <div class="chart-source">Source: labels.csv (801 samples)</div>
+                    <canvas id="classDistChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-title">📈 Model Comparison</div>
+                    <div class="chart-source">Source: model_comparison.csv</div>
+                    <canvas id="modelCompChart"></canvas>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="logo">🧬 RNA-Seq Cancer Biomarker Discovery</div>
+            <div class="footer-links">
+                <a href="https://github.com/SiD-array/rna-seq-cancer-biomarker-discovery" target="_blank">GitHub</a>
+                <a href="https://www.kaggle.com/datasets/waalbannyantudre/gene-expression-cancer-rna-seq-donated-on-682016" target="_blank">Dataset</a>
+                <a href="https://biit.cs.ut.ee/gprofiler/" target="_blank">gProfiler</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Gene Detail Modal -->
+    <div class="modal-overlay" id="geneModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Gene Details</h3>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <script>
+        // Biomarker data - loaded from JSON
+        let biomarkers = [];
+        
+        // Cancer type colors
+        const cancerColors = {
+            'BRCA': 'rgba(244, 63, 94, 0.8)',
+            'COAD': 'rgba(251, 191, 36, 0.8)',
+            'KIRC': 'rgba(56, 189, 248, 0.8)',
+            'LUAD': 'rgba(45, 212, 191, 0.8)',
+            'PRAD': 'rgba(139, 92, 246, 0.8)'
+        };
+
+        // Load data
+        async function loadData() {
+            try {
+                const response = await fetch('data/top_50_biomarkers.json');
+                const data = await response.json();
+                biomarkers = data.biomarkers;
+                renderTable(biomarkers);
+                renderCharts();
+            } catch (error) {
+                console.error('Error loading data:', error);
+                // Use fallback hardcoded data if JSON fails
+                useFallbackData();
+            }
+        }
+
+        // Fallback data from actual project files
+        function useFallbackData() {
+            biomarkers = [
+                {rank: 1, gene_id: 'gene_15898', max_abs_coef: 0.0816, dominant_class: 'LUAD', dominant_coef: 0.0816, coefficients: {BRCA: -0.0496, COAD: -0.0177, KIRC: -0.0042, LUAD: 0.0816}},
+                {rank: 2, gene_id: 'gene_6594', max_abs_coef: 0.0615, dominant_class: 'LUAD', dominant_coef: 0.0615, coefficients: {BRCA: -0.0614, COAD: 0.0144, KIRC: -0.0066, LUAD: 0.0615}},
+                {rank: 3, gene_id: 'gene_7964', max_abs_coef: 0.0538, dominant_class: 'BRCA', dominant_coef: -0.0538, coefficients: {BRCA: -0.0538, COAD: 0.0038, KIRC: 0.0194, LUAD: 0.0323}},
+                {rank: 4, gene_id: 'gene_2318', max_abs_coef: 0.0534, dominant_class: 'BRCA', dominant_coef: -0.0534, coefficients: {BRCA: -0.0534, COAD: 0.0113, KIRC: -0.0103, LUAD: 0.0531}},
+                {rank: 5, gene_id: 'gene_357', max_abs_coef: 0.0513, dominant_class: 'BRCA', dominant_coef: 0.0513, coefficients: {BRCA: 0.0513, COAD: -0.0022, KIRC: -0.0062, LUAD: -0.0383}}
+            ];
+            renderTable(biomarkers);
+            renderCharts();
+        }
+
+        // Render table
+        function renderTable(data) {
+            const tbody = document.getElementById('biomarkerTableBody');
+            tbody.innerHTML = data.map(gene => `
+                <tr onclick="showGeneDetail('${gene.gene_id}')" style="cursor: pointer;">
+                    <td>${gene.rank}</td>
+                    <td><code>${gene.gene_id}</code></td>
+                    <td>${gene.max_abs_coef.toFixed(4)}</td>
+                    <td><span class="cancer-badge cancer-${gene.dominant_class}">${gene.dominant_class}</span></td>
+                    <td class="${gene.dominant_coef >= 0 ? 'positive' : 'negative'}">
+                        ${gene.dominant_coef >= 0 ? '+' : ''}${gene.dominant_coef.toFixed(4)}
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Filter functions
+        document.getElementById('searchInput').addEventListener('input', filterTable);
+        document.getElementById('filterSelect').addEventListener('change', filterTable);
+
+        function filterTable() {
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const cancer = document.getElementById('filterSelect').value;
+            
+            const filtered = biomarkers.filter(gene => {
+                const matchSearch = gene.gene_id.toLowerCase().includes(search);
+                const matchCancer = !cancer || gene.dominant_class === cancer;
+                return matchSearch && matchCancer;
+            });
+            
+            renderTable(filtered);
+        }
+
+        // Charts
+        function renderCharts() {
+            // Top 10 genes chart
+            const top10 = biomarkers.slice(0, 10);
+            new Chart(document.getElementById('topGenesChart'), {
+                type: 'bar',
+                data: {
+                    labels: top10.map(b => b.gene_id),
+                    datasets: [{
+                        label: 'Max |Coefficient|',
+                        data: top10.map(b => b.max_abs_coef),
+                        backgroundColor: top10.map((_, i) => 
+                            `rgba(45, 212, 191, ${1 - i * 0.08})`
+                        ),
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            ticks: { color: '#8b949e' }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#8b949e', maxRotation: 45 }
+                        }
+                    }
+                }
+            });
+
+            // Cancer distribution chart
+            const cancerCounts = {};
+            biomarkers.forEach(b => {
+                cancerCounts[b.dominant_class] = (cancerCounts[b.dominant_class] || 0) + 1;
+            });
+            
+            new Chart(document.getElementById('cancerDistChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(cancerCounts),
+                    datasets: [{
+                        data: Object.values(cancerCounts),
+                        backgroundColor: Object.keys(cancerCounts).map(c => cancerColors[c]),
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: { color: '#8b949e', padding: 15 }
+                        }
+                    }
+                }
+            });
+
+            // Heatmap chart
+            const top15 = biomarkers.slice(0, 15);
+            const cancerTypes = ['BRCA', 'COAD', 'KIRC', 'LUAD'];
+            
+            new Chart(document.getElementById('heatmapChart'), {
+                type: 'bar',
+                data: {
+                    labels: top15.map(b => b.gene_id),
+                    datasets: cancerTypes.map((cancer, idx) => ({
+                        label: cancer,
+                        data: top15.map(b => b.coefficients[cancer] || 0),
+                        backgroundColor: cancerColors[cancer],
+                        borderRadius: 4
+                    }))
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: { color: '#8b949e' }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            ticks: { color: '#8b949e' }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#8b949e', maxRotation: 45 }
+                        }
+                    }
+                }
+            });
+
+            // Class distribution
+            const classData = {
+                'BRCA': 300,
+                'KIRC': 146,
+                'LUAD': 141,
+                'PRAD': 136,
+                'COAD': 78
+            };
+            
+            new Chart(document.getElementById('classDistChart'), {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(classData),
+                    datasets: [{
+                        label: 'Samples',
+                        data: Object.values(classData),
+                        backgroundColor: Object.keys(classData).map(c => cancerColors[c]),
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            ticks: { color: '#8b949e' }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#8b949e' }
+                        }
+                    }
+                }
+            });
+
+            // Model comparison
+            new Chart(document.getElementById('modelCompChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['Logistic Regression', 'SVC', 'Random Forest'],
+                    datasets: [
+                        {
+                            label: 'F1-Macro',
+                            data: [100, 99.89, 99.68],
+                            backgroundColor: 'rgba(45, 212, 191, 0.8)',
+                            borderRadius: 6
+                        },
+                        {
+                            label: 'Accuracy',
+                            data: [100, 99.88, 99.63],
+                            backgroundColor: 'rgba(139, 92, 246, 0.8)',
+                            borderRadius: 6
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: { color: '#8b949e' }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            min: 99,
+                            max: 100.5,
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            ticks: { color: '#8b949e' }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#8b949e' }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Modal functions
+        function showGeneDetail(geneId) {
+            const gene = biomarkers.find(b => b.gene_id === geneId);
+            if (!gene) return;
+
+            document.getElementById('modalTitle').textContent = gene.gene_id;
+            document.getElementById('modalBody').innerHTML = `
+                <div class="detail-row">
+                    <span class="detail-label">Rank</span>
+                    <span class="detail-value">#${gene.rank}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Max |Coefficient|</span>
+                    <span class="detail-value">${gene.max_abs_coef.toFixed(4)}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Dominant Cancer</span>
+                    <span class="detail-value"><span class="cancer-badge cancer-${gene.dominant_class}">${gene.dominant_class}</span></span>
+                </div>
+                <h4 style="margin: 25px 0 15px; color: var(--text-secondary);">Coefficients by Cancer Type</h4>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 15px;">Source: gene_coefficient_rankings.csv</p>
+                ${Object.entries(gene.coefficients).map(([cancer, coef]) => `
+                    <div class="detail-row">
+                        <span class="detail-label">${cancer}</span>
+                        <span class="detail-value ${coef >= 0 ? 'positive' : 'negative'}">
+                            ${coef >= 0 ? '+' : ''}${coef.toFixed(4)}
+                        </span>
+                    </div>
+                `).join('')}
+            `;
+            document.getElementById('geneModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('geneModal').style.display = 'none';
+        }
+
+        document.getElementById('geneModal').addEventListener('click', (e) => {
+            if (e.target.id === 'geneModal') closeModal();
+        });
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Initialize
+        loadData();
+    </script>
+</body>
+</html>

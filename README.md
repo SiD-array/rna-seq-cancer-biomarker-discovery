@@ -125,6 +125,10 @@ RNA_Seq_Biomarker_Project/
 │   ├── gene_coefficient_rankings.csv   # Full gene rankings
 │   ├── model_results_summary.txt       # Detailed model results
 │   └── model_comparison.csv            # Model performance comparison
+├── website/                        # Interactive dashboard
+│   ├── index.html                  # Main dashboard page
+│   └── data/                       # JSON data for web app
+│       └── top_50_biomarkers.json  # Biomarker data
 ├── Project_Report.pdf              # Full project report
 ├── requirements.txt
 └── README.md
@@ -207,6 +211,29 @@ python scripts/4_interpret_biomarkers.py
 - **Model Interpretability**: Full coefficient analysis for understanding gene-cancer associations
 - **Pathway Validation**: External validation via gProfiler pathway enrichment analysis
 - **Production Ready**: Trained model saved for deployment
+
+---
+
+## 🌐 Interactive Dashboard
+
+An interactive web dashboard is included to explore the project results visually.
+
+### Features
+
+- **Home**: Project overview with key statistics and pipeline flow
+- **Phase 5A**: Coefficient analysis methodology and findings
+- **Phase 5B**: Pathway enrichment validation and gene ID mapping challenge
+- **Discovery Zone**: Interactive table of 50 biomarkers with search/filter
+- **Model Results**: Performance comparison charts
+
+### Running the Dashboard
+
+```bash
+cd website
+python -m http.server 8080
+```
+
+Then open `http://localhost:8080` in your browser.
 
 ---
 
