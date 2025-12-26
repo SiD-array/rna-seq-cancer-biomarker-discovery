@@ -218,6 +218,10 @@ python scripts/4_interpret_biomarkers.py
 
 An interactive web dashboard is included to explore the project results visually.
 
+### 🔗 Live Demo
+
+**[View the Dashboard →](https://biomarker-discovery-app.vercel.app/)**
+
 ### Features
 
 - **Home**: Project overview with key statistics and pipeline flow
